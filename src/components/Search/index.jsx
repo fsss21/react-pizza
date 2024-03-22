@@ -8,8 +8,6 @@ const Search = ({ searchValue, setSearchValue }) => {
                     d="M15.8053 15.8013L21 21M10.5 7.5V13.5M7.5 10.5H13.5M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z"
                     stroke="#000000"
                     stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
                 />
             </svg>
             <input value={searchValue} onChange={e => setSearchValue(e.target.value)} className="search" type="text" placeholder="Поиск пиццы..." />
