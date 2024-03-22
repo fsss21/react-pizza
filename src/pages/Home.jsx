@@ -1,4 +1,5 @@
 import Categories from '../components/Categories';
+import { Analytics } from '@vercel/analytics/react';
 import Sort from '../components/Sort';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import PizzaBlock from '../components/PizzaBlock/index';
@@ -36,15 +37,18 @@ const Home = ({ searchValue }) => {
     const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
 
     return (
-        <div className="container">
-            <div className="content__top">
-                <Categories value={categoryId} onChangeCategory={index => setCategoryId(index)} />
-                <Sort value={sortType} onChangeSort={index => setSortType(index)} />
+        <>
+            <div className="container">
+                <div className="content__top">
+                    <Categories value={categoryId} onChangeCategory={index => setCategoryId(index)} />
+                    <Sort value={sortType} onChangeSort={index => setSortType(index)} />
+                </div>
+                <h2 className="content__title">Все пиццы</h2>
+                <div className="content__items">{isLoading ? skeletons : items}</div>
+                <Pagination onChangePage={number => setCurrentPage(number)} />
             </div>
-            <h2 className="content__title">Все пиццы</h2>
-            <div className="content__items">{isLoading ? skeletons : items}</div>
-            <Pagination onChangePage={number => setCurrentPage(number)} />
-        </div>
+            <Analytics />
+        </>
     );
 };
 
