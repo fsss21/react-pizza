@@ -1,10 +1,9 @@
 import React from 'react';
+import { typePizzas } from '../../utils/Arrays';
 
 const PizzaBlock = ({ title, price, imageUrl, sizes, types }) => {
     const [activeType, setActiveType] = React.useState(0);
     const [activeSize, setActiveSize] = React.useState(0);
-
-    const typePizzas = ['Тонкое', 'Традиционное'];
 
     return (
         <div className="pizza-block-wrapper">

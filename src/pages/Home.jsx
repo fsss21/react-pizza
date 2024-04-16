@@ -1,37 +1,66 @@
 import Categories from '../components/Categories';
+import qs from 'qs';
 import { Analytics } from '@vercel/analytics/react';
 import Sort from '../components/Sort';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import PizzaBlock from '../components/PizzaBlock/index';
 import React from 'react';
 import Pagination from '../components/Pagination';
+import { SearchContext } from '../App';
+import { setCategoryId, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { menu } from '../utils/Arrays';
 
-const Home = ({ searchValue }) => {
+const Home = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { categoryId, sort, currentPage } = useSelector(state => state.filter);
+    const { searchValue } = React.useContext(SearchContext);
     const [pizzas, setPizzas] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(true);
-    const [categoryId, setCategoryId] = React.useState(0);
-    const [currentPage, setCurrentPage] = React.useState(1);
-    const [sortType, setSortType] = React.useState({
-        name: 'популярности',
-        sortProperty: 'rating',
-    });
+
+    const onChangeCategory = id => {
+        dispatch(setCategoryId(id));
+    };
+
+    const onChangePage = number => {
+        dispatch(setCurrentPage(number));
+    };
+
+    React.useEffect(() => {
+        if (window.location.search) {
+            const params = qs.parse(window.location.search.substring(1));
+            const sort = menu.find(obj => obj.sortProperty === params.sortProperty);
+            dispatch(setFilters({ ...params, sort }));
+        }
+    }, []);
 
     React.useEffect(() => {
         setIsLoading(true);
 
-        const sortBy = sortType.sortProperty.replace('-', '');
-        const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc';
+        const sortBy = sort.sortProperty.replace('-', '');
+        const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
         const category = categoryId > 0 ? `category=${categoryId}` : '';
         const search = searchValue ? `&search=${searchValue}` : '';
 
-        fetch(`https://655a10ee6981238d054d1578.mockapi.io/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`)
-            .then(res => res.json())
-            .then(arr => {
-                setPizzas(arr);
+        axios
+            .get(`https://655a10ee6981238d054d1578.mockapi.io/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`)
+            .then(response => {
+                setPizzas(response.data);
                 setIsLoading(false);
+            })
+            .catch(error => {
+                console.log(error);
             });
         window.scrollTo(0, 0);
-    }, [categoryId, sortType, searchValue, currentPage]);
+    }, [categoryId, sort, searchValue, currentPage]);
+
+    React.useEffect(() => {
+        const queryString = qs.stringify({ sortProperty: sort.sortProperty, categoryId, currentPage });
+        navigate(`?${queryString}`);
+    }, [categoryId, sort, searchValue, currentPage]);
 
     const items = pizzas.map(pizza => <PizzaBlock key={pizza.id} {...pizza} />);
     const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
@@ -40,12 +69,12 @@ const Home = ({ searchValue }) => {
         <>
             <div className="container">
                 <div className="content__top">
-                    <Categories value={categoryId} onChangeCategory={index => setCategoryId(index)} />
-                    <Sort value={sortType} onChangeSort={index => setSortType(index)} />
+                    <Categories value={categoryId} onChangeCategory={onChangeCategory} />
+                    <Sort />
                 </div>
                 <h2 className="content__title">Все пиццы</h2>
                 <div className="content__items">{isLoading ? skeletons : items}</div>
-                <Pagination onChangePage={number => setCurrentPage(number)} />
+                <Pagination currentPage={currentPage} onChangePage={onChangePage} />
             </div>
             <Analytics />
         </>

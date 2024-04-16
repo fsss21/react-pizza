@@ -1,18 +1,15 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setSort } from '../redux/slices/filterSlice';
+import { menu } from '../utils/Arrays';
 
-const Sort = ({ value, onChangeSort }) => {
+const Sort = () => {
+    const dispatch = useDispatch();
+    const sort = useSelector(state => state.filter.sort);
     const [sortToggle, setSortToggle] = React.useState(false);
-    const menu = [
-        { name: 'Популярности(ASC)', sortProperty: '-rating' },
-        { name: 'Популярности(DESC)', sortProperty: 'rating' },
-        { name: 'Цене(ASC)', sortProperty: '-price' },
-        { name: 'Цене(DESC)', sortProperty: 'price' },
-        { name: 'Алфавиту(ASC)', sortProperty: '-title' },
-        { name: 'Алфавиту(DESC)', sortProperty: 'title' },
-    ];
 
-    const onClickMenuItem = index => {
-        onChangeSort(index);
+    const onClickMenuItem = obj => {
+        dispatch(setSort(obj));
         setSortToggle(false);
     };
 
@@ -26,13 +23,13 @@ const Sort = ({ value, onChangeSort }) => {
                     />
                 </svg>
                 <b>Сортировка по:</b>
-                <span onClick={() => setSortToggle(!sortToggle)}>{value.name}</span>
+                <span onClick={() => setSortToggle(!sortToggle)}>{sort.name}</span>
             </div>
             {sortToggle && (
                 <div className="sort__popup">
                     <ul>
                         {menu.map((obj, index) => (
-                            <li key={index} onClick={() => onClickMenuItem(obj)} className={value.sortProperty === obj.sortProperty ? 'active' : ''}>
+                            <li key={index} onClick={() => onClickMenuItem(obj)} className={sort.sortProperty === obj.sortProperty ? 'active' : ''}>
                                 {obj.name}
                             </li>
                         ))}

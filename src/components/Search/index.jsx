@@ -1,18 +1,43 @@
+import React from 'react';
+import { SearchContext } from '../../App';
+import debounce from 'lodash.debounce';
 import './SearchModule.scss';
 
-const Search = ({ searchValue, setSearchValue }) => {
+const Search = () => {
+    const [value, setValue] = React.useState('');
+    const { setSearchValue } = React.useContext(SearchContext);
+    const inpurRef = React.useRef();
+
+    const onClickClear = () => {
+        setSearchValue('');
+        setValue('');
+        inpurRef.current.focus();
+    };
+
+    const updateSearchValue = React.useCallback(
+        debounce(str => {
+            setSearchValue(str);
+        }, 250),
+        []
+    );
+
+    const onChangeInput = event => {
+        setValue(event.target.value);
+        updateSearchValue(event.target.value);
+    };
+
     return (
         <div className="box-search">
             <svg className="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M15.8053 15.8013L21 21M10.5 7.5V13.5M7.5 10.5H13.5M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z"
                     stroke="#000000"
-                    stroke-width="2"
+                    strokeWidth="2"
                 />
             </svg>
-            <input value={searchValue} onChange={e => setSearchValue(e.target.value)} className="search" type="text" placeholder="Поиск пиццы..." />
-            {searchValue && (
-                <svg onClick={() => setSearchValue('')} className="icon-delete" viewBox="0 -5 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <input ref={inpurRef} value={value} onChange={onChangeInput} className="search" type="text" placeholder="Поиск пиццы..." />
+            {value && (
+                <svg onClick={() => onClickClear()} className="icon-delete" viewBox="0 -5 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
                     <defs></defs>
                     <g fill-rule="evenodd">
                         <g transform="translate(-516.000000, -1144.000000)" fill="#000000">
