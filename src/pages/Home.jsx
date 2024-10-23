@@ -41,7 +41,7 @@ const Home = () => {
 
         axios
             // .get(`https://e8fbf1aa7519b5a2.mokky.dev/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`)
-            .get(`https://e8fbf1aa7519b5a2.mokky.dev/pizzas?page=${currentPage}`)
+            .get('https://e8fbf1aa7519b5a2.mokky.dev/pizzas')
             .then(response => {
                 setPizzas(response.data);
                 setIsLoading(false);
