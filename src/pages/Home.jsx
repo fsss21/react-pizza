@@ -40,8 +40,7 @@ const Home = () => {
         const search = searchValue ? `&search=${searchValue}` : '';
 
         axios
-            // .get(`https://e8fbf1aa7519b5a2.mokky.dev/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`)
-            .get('https://e8fbf1aa7519b5a2.mokky.dev/pizzas')
+            .get(`https://671924ac7fc4c5ff8f4c9c00.mockapi.io/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`)
             .then(response => {
                 setPizzas(response.data);
                 setIsLoading(false);
