@@ -9,4 +9,4 @@ export const menu = [
 
 export const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
 
-export const typePizzas = ['Тонкое', 'Традиционное'];
+export const typeNames = ['Тонкое', 'Традиционное'];
