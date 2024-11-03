@@ -1,13 +1,21 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSort } from '../redux/slices/filterSlice';
-import { menu } from '../utils/Arrays';
+
+const menu = [
+    { name: 'Популярности(ASC)', sortProperty: '-rating' },
+    { name: 'Популярности(DESC)', sortProperty: 'rating' },
+    { name: 'Цене(ASC)', sortProperty: '-price' },
+    { name: 'Цене(DESC)', sortProperty: 'price' },
+    { name: 'Алфавиту(ASC)', sortProperty: '-title' },
+    { name: 'Алфавиту(DESC)', sortProperty: 'title' },
+];
 
 const Sort = () => {
     const dispatch = useDispatch();
     const sort = useSelector(state => state.filter.sort);
     const [sortToggle, setSortToggle] = React.useState(false);
-    const sortRef = React.useRef();
+    const sortRef = React.useRef(null);
 
     const onClickMenuItem = obj => {
         dispatch(setSort(obj));
@@ -25,7 +33,7 @@ const Sort = () => {
         document.body.addEventListener('click', handleClickOutside);
 
         return () => document.body.removeEventListener('click', handleClickOutside);
-    }, [sortRef]);
+    }, []);
 
     return (
         <div ref={sortRef} className="sort">
