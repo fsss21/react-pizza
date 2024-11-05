@@ -11,7 +11,7 @@ const Header = () => {
     return (
         <div className="header">
             <div className="container">
-                <Link to="/">
+                <Link to="/home">
                     <div className="header__logo">
                         <img width="38" src={logo} alt="Pizza logo" />
                         <div>

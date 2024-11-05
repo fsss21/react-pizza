@@ -48,7 +48,7 @@ const Cart = () => {
                         </span>
                     </div>
                     <div className="cart__bottom-buttons">
-                        <Link to="/" className="button button--outline button--add go-back-btn">
+                        <Link to="/home" className="button button--outline button--add go-back-btn">
                             <span>Вернуться назад</span>
                         </Link>
                         <div className="button pay-btn">

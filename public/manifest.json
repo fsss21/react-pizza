@@ -1,7 +1,7 @@
 {
     "name": "React PizzaV2",
     "short_name": "RPv2",
-    "start_url": "/",
+    "start_url": "/home",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#000000",
